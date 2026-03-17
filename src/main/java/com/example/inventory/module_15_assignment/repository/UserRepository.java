@@ -1,6 +1,6 @@
 package com.example.inventory.module_15_assignment.repository;
 
-import com.example.inventory.module_15_assignment.model.AppUser;
+import com.example.inventory.module_15_assignment.entity.AppUser;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

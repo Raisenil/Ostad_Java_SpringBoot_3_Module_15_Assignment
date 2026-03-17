@@ -21,7 +21,9 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/register", "/h2-console/**").permitAll()
+                        .requestMatchers("/api/auth/register/user", "/api/auth/register/admin", "/h2-console/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/notes/**").hasAuthority("ROLE_USER")
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()));
@@ -39,4 +41,3 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 }
-

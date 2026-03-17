@@ -1,9 +1,8 @@
 package com.example.inventory.module_15_assignment.service;
 
 import com.example.inventory.module_15_assignment.dto.NoteRequest;
-import com.example.inventory.module_15_assignment.model.AppUser;
-import com.example.inventory.module_15_assignment.model.Note;
-import com.example.inventory.module_15_assignment.model.Role;
+import com.example.inventory.module_15_assignment.entity.AppUser;
+import com.example.inventory.module_15_assignment.entity.Note;
 import com.example.inventory.module_15_assignment.repository.NoteRepository;
 import com.example.inventory.module_15_assignment.repository.UserRepository;
 import java.util.List;
@@ -22,28 +21,19 @@ public class NoteService {
     }
 
     public Note createNote(String username, NoteRequest request) {
-        AppUser owner = findUser(username);
+        findUser(username); // validate user exists
         Note note = new Note();
         note.setTitle(request.getTitle());
         note.setContent(request.getContent());
-        note.setOwner(owner);
+        note.setOwnerUsername(username);
         return noteRepository.save(note);
     }
 
     public List<Note> getNotes(String username) {
-        AppUser currentUser = findUser(username);
-        if (currentUser.getRole() == Role.ROLE_ADMIN) {
-            return noteRepository.findAll();
-        }
         return noteRepository.findByOwnerUsername(username);
     }
 
     public Note getNoteById(Long id, String username) {
-        AppUser currentUser = findUser(username);
-        if (currentUser.getRole() == Role.ROLE_ADMIN) {
-            return noteRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("note not found"));
-        }
         return noteRepository.findByIdAndOwnerUsername(id, username)
                 .orElseThrow(() -> new AccessDeniedException("note not found or forbidden"));
     }
@@ -58,16 +48,18 @@ public class NoteService {
     }
 
     public void deleteNote(Long id, String username) {
-        AppUser currentUser = findUser(username);
-        if (currentUser.getRole() == Role.ROLE_ADMIN) {
-            Note note = noteRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("note not found"));
-            noteRepository.delete(note);
-            return;
-        }
-
         Note note = noteRepository.findByIdAndOwnerUsername(id, username)
                 .orElseThrow(() -> new AccessDeniedException("note not found or forbidden"));
+        noteRepository.delete(note);
+    }
+
+    public List<Note> getAllNotes() {
+        return noteRepository.findAll();
+    }
+
+    public void deleteAnyNoteById(Long id) {
+        Note note = noteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("note not found"));
         noteRepository.delete(note);
     }
 
@@ -76,4 +68,3 @@ public class NoteService {
                 .orElseThrow(() -> new IllegalArgumentException("user not found"));
     }
 }
-

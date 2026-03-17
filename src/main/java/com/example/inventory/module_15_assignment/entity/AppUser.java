@@ -1,4 +1,4 @@
-package com.example.inventory.module_15_assignment.model;
+package com.example.inventory.module_15_assignment.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

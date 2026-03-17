@@ -1,7 +1,7 @@
 package com.example.inventory.module_15_assignment.controller;
 
 import com.example.inventory.module_15_assignment.dto.RegisterRequest;
-import com.example.inventory.module_15_assignment.model.AppUser;
+import com.example.inventory.module_15_assignment.entity.AppUser;
 import com.example.inventory.module_15_assignment.service.UserService;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -22,9 +22,19 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<Map<String, Object>> register(@RequestBody RegisterRequest request) {
-        AppUser user = userService.register(request);
+    @PostMapping("/register/user")
+    public ResponseEntity<Map<String, Object>> registerUser(@RequestBody RegisterRequest request) {
+        AppUser user = userService.registerUser(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Map.of(
+                        "id", user.getId(),
+                        "username", user.getUsername(),
+                        "role", user.getRole().name()));
+    }
+
+    @PostMapping("/register/admin")
+    public ResponseEntity<Map<String, Object>> registerAdmin(@RequestBody RegisterRequest request) {
+        AppUser user = userService.registerAdmin(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Map.of(
                         "id", user.getId(),
@@ -37,4 +47,3 @@ public class AuthController {
         return ResponseEntity.badRequest().body(Map.of("error", exception.getMessage()));
     }
 }
-

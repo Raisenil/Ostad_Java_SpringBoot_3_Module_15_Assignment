@@ -1,6 +1,6 @@
 package com.example.inventory.module_15_assignment.security;
 
-import com.example.inventory.module_15_assignment.model.AppUser;
+import com.example.inventory.module_15_assignment.entity.AppUser;
 import com.example.inventory.module_15_assignment.repository.UserRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

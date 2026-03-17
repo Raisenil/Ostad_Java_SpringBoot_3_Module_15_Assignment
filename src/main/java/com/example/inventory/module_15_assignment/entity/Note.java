@@ -1,13 +1,10 @@
-package com.example.inventory.module_15_assignment.model;
+package com.example.inventory.module_15_assignment.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,9 +21,8 @@ public class Note {
     @Column(nullable = false, length = 5000)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "owner_id", nullable = false)
-    private AppUser owner;
+    @Column(name = "ownerUsername", nullable = false)
+    private String ownerUsername;
 
     public Long getId() {
         return id;
@@ -48,12 +44,12 @@ public class Note {
         this.content = content;
     }
 
-    public AppUser getOwner() {
-        return owner;
+    public String getOwnerUsername() {
+        return ownerUsername;
     }
 
-    public void setOwner(AppUser owner) {
-        this.owner = owner;
+    public void setOwnerUsername(String ownerUsername) {
+        this.ownerUsername = ownerUsername;
     }
 }
 

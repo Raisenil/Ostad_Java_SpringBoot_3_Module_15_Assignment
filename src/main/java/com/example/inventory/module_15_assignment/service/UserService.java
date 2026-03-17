@@ -1,8 +1,8 @@
 package com.example.inventory.module_15_assignment.service;
 
 import com.example.inventory.module_15_assignment.dto.RegisterRequest;
-import com.example.inventory.module_15_assignment.model.AppUser;
-import com.example.inventory.module_15_assignment.model.Role;
+import com.example.inventory.module_15_assignment.entity.AppUser;
+import com.example.inventory.module_15_assignment.entity.Role;
 import com.example.inventory.module_15_assignment.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,15 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public AppUser register(RegisterRequest request) {
+    public AppUser registerUser(RegisterRequest request) {
+        return registerWithRole(request, Role.ROLE_USER);
+    }
+
+    public AppUser registerAdmin(RegisterRequest request) {
+        return registerWithRole(request, Role.ROLE_ADMIN);
+    }
+
+    private AppUser registerWithRole(RegisterRequest request, Role role) {
         if (request.getUsername() == null || request.getUsername().isBlank()) {
             throw new IllegalArgumentException("username is required");
         }
@@ -29,8 +37,6 @@ public class UserService {
             throw new IllegalArgumentException("username already exists");
         }
 
-        Role role = request.getRole() == null ? Role.ROLE_USER : request.getRole();
-
         AppUser user = new AppUser();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -38,4 +44,3 @@ public class UserService {
         return userRepository.save(user);
     }
 }
-

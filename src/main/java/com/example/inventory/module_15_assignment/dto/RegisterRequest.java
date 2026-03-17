@@ -1,6 +1,6 @@
 package com.example.inventory.module_15_assignment.dto;
 
-import com.example.inventory.module_15_assignment.model.Role;
+import com.example.inventory.module_15_assignment.entity.Role;
 
 public class RegisterRequest {
     private String username;
